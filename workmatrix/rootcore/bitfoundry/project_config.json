@@ -1,0 +1,77 @@
+export type Environment = "development" | "staging" | "production"
+export type LogLevel = "debug" | "info" | "warn" | "error"
+export type LogDestination = "console" | "file" | "remote"
+
+export interface LoggingConfig {
+  level: LogLevel
+  destinations: LogDestination[]
+  filePath?: string
+  remoteUrl?: string
+}
+
+export interface FeatureFlags {
+  enableDiagnostics: boolean
+  enableRealTimeAlerts: boolean
+  enableMetrics?: boolean
+  experimentalMode?: boolean
+}
+
+export interface ProjectConfig {
+  projectName: string
+  environment: Environment
+  logging: LoggingConfig
+  features: FeatureFlags
+}
+
+export class ConfigManager {
+  private config: ProjectConfig
+
+  constructor(initial: ProjectConfig) {
+    this.config = initial
+  }
+
+  get(): ProjectConfig {
+    return this.config
+  }
+
+  update(partial: Partial<ProjectConfig>): void {
+    this.config = { ...this.config, ...partial }
+  }
+
+  setLogLevel(level: LogLevel): void {
+    this.config.logging.level = level
+  }
+
+  isFeatureEnabled(flag: keyof FeatureFlags): boolean {
+    return !!this.config.features[flag]
+  }
+
+  validate(): string[] {
+    const issues: string[] = []
+    if (!this.config.projectName) issues.push("projectName is missing")
+    if (!this.config.logging.destinations.length)
+      issues.push("At least one log destination must be defined")
+    if (
+      this.config.logging.destinations.includes("file") &&
+      !this.config.logging.filePath
+    ) {
+      issues.push("filePath required for file logging")
+    }
+    if (
+      this.config.logging.destinations.includes("remote") &&
+      !this.config.logging.remoteUrl
+    ) {
+      issues.push("remoteUrl required for remote logging")
+    }
+    return issues
+  }
+
+  static defaultConfig(name: string): ProjectConfig {
+    return {
+      projectName: name,
+      environment: "development",
+      logging: { level: "info", destinations: ["console"] },
+      features: { enableDiagnostics: false, enableRealTimeAlerts: false },
+    }
+  }
+}

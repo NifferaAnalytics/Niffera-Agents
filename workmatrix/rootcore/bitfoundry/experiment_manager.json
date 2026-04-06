@@ -1,0 +1,66 @@
+export type ExperimentStatus = "draft" | "running" | "completed" | "failed"
+
+export interface ExperimentParameters {
+  tokenSymbol: string
+  analysisWindowMinutes: number
+  volatilityThreshold: number
+}
+
+export interface ExperimentResult {
+  summary: string
+  metrics: Record<string, number>
+  generatedAt: number
+}
+
+export interface ExperimentRecord {
+  experimentId: string
+  createdAt: string
+  description: string
+  parameters: ExperimentParameters
+  status: ExperimentStatus
+  results: ExperimentResult | null
+  notes: string
+}
+
+export class ExperimentManager {
+  private experiments: Map<string, ExperimentRecord> = new Map()
+
+  create(record: ExperimentRecord): void {
+    if (!record.experimentId) throw new Error("experimentId is required")
+    this.experiments.set(record.experimentId, record)
+  }
+
+  get(id: string): ExperimentRecord | undefined {
+    return this.experiments.get(id)
+  }
+
+  updateStatus(id: string, status: ExperimentStatus): boolean {
+    const exp = this.experiments.get(id)
+    if (!exp) return false
+    exp.status = status
+    return true
+  }
+
+  addResult(id: string, result: ExperimentResult): boolean {
+    const exp = this.experiments.get(id)
+    if (!exp) return false
+    exp.results = result
+    exp.status = "completed"
+    return true
+  }
+
+  appendNote(id: string, note: string): boolean {
+    const exp = this.experiments.get(id)
+    if (!exp) return false
+    exp.notes = exp.notes ? `${exp.notes}\n${note}` : note
+    return true
+  }
+
+  list(): ExperimentRecord[] {
+    return Array.from(this.experiments.values())
+  }
+
+  clear(): void {
+    this.experiments.clear()
+  }
+}
