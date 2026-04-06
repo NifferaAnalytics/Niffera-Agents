@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="400" height="400" alt="niffera_analytics_logo" src="https://github.com/user-attachments/assets/02314c23-648e-4532-a004-79c0b6cb2e83" />
+  <img width="400" height="400" alt="niffera_analytics_logo" src="https://github.com/NifferaAnalytics/Niffera-Agents/blob/main/niffera-removebg-preview.png" />
 </p>
 
 <h1 align="center">Niffera Analytics</h1>
