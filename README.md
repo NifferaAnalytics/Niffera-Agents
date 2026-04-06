@@ -1,391 +1,370 @@
-# DeviceAI Runtime
+<p align="center">
+  <img width="400" height="400" alt="niffera_analytics_logo" src="https://github.com/user-attachments/assets/02314c23-648e-4532-a004-79c0b6cb2e83" />
+</p>
 
-**On-device AI runtime for Kotlin, iOS, Flutter, and React Native. Ship speech recognition, synthesis, and LLM inference on Android, iOS, and Desktop — no cloud required, no latency, no privacy risk.**
+<h1 align="center">Niffera Analytics</h1>
 
-[![Build](https://github.com/deviceai-labs/deviceai/actions/workflows/ci.yml/badge.svg)](https://github.com/deviceai-labs/deviceai/actions/workflows/ci.yml)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
-[![Maven Central](https://img.shields.io/maven-central/v/dev.deviceai/speech)](https://central.sonatype.com/artifact/dev.deviceai/speech)
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.2-blueviolet?logo=kotlin)](https://kotlinlang.org)
-[![KMP](https://img.shields.io/badge/Kotlin_Multiplatform-Android%20%7C%20iOS%20%7C%20Desktop-blue)](https://www.jetbrains.com/kotlin-multiplatform/)
-
----
-
-## What's available
-
-| Module | Language | Distribution | Status |
-|--------|----------|--------------|--------|
-| `kotlin/core` | Kotlin (Android + KMP) | Maven Central `dev.deviceai:core` | ✅ Available |
-| `kotlin/speech` | Kotlin (Android + KMP) | Maven Central `dev.deviceai:speech` | ✅ Available |
-| `kotlin/llm` | Kotlin (Android + KMP) | Maven Central `dev.deviceai:llm` | ✅ Available |
-| `ios/speech` | Swift | Swift Package Index | 🗓 Planned |
-| `flutter/speech` | Dart | pub.dev `deviceai_speech` | 🗓 Planned |
-| `react-native/speech` | TypeScript | npm `react-native-deviceai-speech` | 🗓 Planned |
-
-Each SDK is **independent and native to its platform** — they all call the same C++ engines (whisper.cpp, sherpa-onnx, llama.cpp) directly, with no cross-language bridging.
+<div align="center">
+  <p><strong>AI-powered on-chain trading terminal with risk analytics, wallet behavior insights, and Solana execution via Jupiter</strong></p>
+  <p>
+    Token analytics • Wallet profiling • AI agents • Jupiter swaps • API jobs & webhooks • Credit-based access
+  </p>
+</div>
 
 ---
 
-## Repository structure
+## Quick Links
 
+[![Web App](https://img.shields.io/badge/Web%20App-Open-3b82f6?style=for-the-badge&logo=googlechrome&logoColor=white)](https://your-web-app-link)
+[![Docs](https://img.shields.io/badge/Docs-Read-8b5cf6?style=for-the-badge&logo=readthedocs&logoColor=white)](https://your-docs-link)
+[![API](https://img.shields.io/badge/API-Explore-0f766e?style=for-the-badge&logo=fastapi&logoColor=white)](https://api.niffera.com/v1)
+[![X.com](https://img.shields.io/badge/X.com-Follow-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/your_account)
+[![Telegram Community](https://img.shields.io/badge/Telegram%20Community-Join-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/your_group)
+
+> [!IMPORTANT]
+> **Niffera Analytics** is a non-custodial platform. Your wallet stays in control, and every on-chain action still requires your explicit approval.
+
+> [!TIP]
+> The fastest way to understand the product is to run one token check and one wallet check from the same account, then compare the analytics view, AI commentary, and execution flow.
+
+> [!NOTE]
+> Solana is the live execution layer in the current version. Multi-chain analytics expansion is part of the roadmap and will be added progressively where data quality and routing are reliable.
+
+> [!WARNING]
+> All analytics, agent outputs, and market data should be treated as informational. Trading crypto is risky, prices move fast, and execution outcomes are never guaranteed.
+
+> [!CAUTION]
+> Swaps are routed through Jupiter and signed in your own wallet. Always verify token, size, slippage, and route details before confirming any transaction.
+
+---
+
+## The Primitive
+
+Niffera Analytics is a **drop-in risk and execution intelligence block** for on-chain trading systems.
+
+It combines three layers into one surface: a trader-facing terminal, AI agents for token and wallet interpretation, and an integration-ready backend with jobs and webhooks. In practice, that means a builder can use Niffera either as a full product interface or as a reusable analytics engine inside bots, dashboards, automations, and internal tools.
+
+Instead of exposing only raw market data, Niffera is built around a more useful primitive for production systems: **risk-aware token and wallet decisioning**.
+
+| Layer | What it does | Why it matters |
+|---|---|---|
+| Terminal layer | Token checks, wallet reads, PnL, exposure, swaps | Lets traders go from analysis to action in one place |
+| Agent layer | Analytics Agent and Research Agent | Turns metrics and news into readable outputs |
+| API layer | HTTP endpoints, async jobs, webhooks | Makes the same logic embeddable in external systems |
+
+---
+
+## Input → Output
+
+A typical Niffera flow is simple: submit a token or wallet, let the engine calculate metrics and risk, then return a structured result that can be shown in UI or consumed by automation.
+
+```text
+Input
+token_address + chain + timeframe
+
+↓
+Analytics engine
+liquidity + volatility + holder structure + flow + execution risk
+
+↓
+Agent interpretation
+summary + flags + trader-readable context
+
+↓
+Output
+dashboard view, API payload, webhook event, or swap decision
 ```
-deviceai/
-├── kotlin/
-│   ├── core/       dev.deviceai:core    ✅  model management, storage, logging
-│   ├── speech/     dev.deviceai:speech  ✅  STT (Whisper) + TTS (sherpa-onnx) + VAD
-│   └── llm/        dev.deviceai:llm     ✅  LLM inference via llama.cpp + offline RAG
-├── ios/
-│   └── speech/     Swift Package            🗓  Swift async/await wrapper
-├── flutter/
-│   └── speech/     pub.dev: deviceai_speech 🗓  Flutter plugin
-├── react-native/
-│   └── speech/     npm: react-native-deviceai-speech  🗓  TurboModule
-└── samples/
-    ├── composeApp/ Compose Multiplatform demo  ✅
-    └── iosApp/     native iOS shell            ✅
-```
+
+### Concrete example
+
+| Input | Internal processing | Output |
+|---|---|---|
+| Solana token address | Price, liquidity, volume, volatility, holder concentration, flow analysis | Risk summary, flags, metric payload, optional AI commentary |
+| Wallet address | PnL history, drawdowns, exposure, behavioral patterns | Wallet profile, discipline/risk insights, current concentration view |
+| Agent run request | Validation, queued job, async execution | `job_id`, status updates, final structured result |
+
+This is the core logic of the product: **fit → integration → extension**.  
+You start with a clear object, get a useful output fast, and then extend the same pattern into bots, workflows, and execution systems.
 
 ---
 
-## Integration — Kotlin (Android, KMP, Desktop)
+## Fastest Integration
 
-### Step 1 — Add dependencies
+The fastest integration path is the Agents API. You send a single request, receive a `job_id`, and then poll or wait for a webhook.
 
-```kotlin
-// build.gradle.kts
-implementation("dev.deviceai:core:0.2.0-alpha02")
-implementation("dev.deviceai:speech:0.2.0-alpha02")   // STT + TTS + VAD
-implementation("dev.deviceai:llm:0.2.0-alpha02")      // LLM inference + RAG
-```
-
-No extra repository config needed — all artifacts are on Maven Central.
-
----
-
-### Step 2 — Initialize the SDK
-
-Call `DeviceAI.initialize()` **once** at app startup before using any module.
-
-#### Android
-
-```kotlin
-import dev.deviceai.core.DeviceAI
-import dev.deviceai.core.Environment
-import dev.deviceai.models.PlatformStorage
-
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        PlatformStorage.initialize(this)
-        DeviceAI.initialize(context = this) {
-            environment = Environment.Development
-        }
-        setContent { App() }
+```bash
+curl -X POST "https://api.niffera.com/v1/agents/run" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_id": "token_analytics_v1",
+    "input": {
+      "token_address": "So11111111111111111111111111111111111111112",
+      "chain": "solana",
+      "timeframe": "24h"
+    },
+    "metadata": {
+      "client_id": "builder-demo",
+      "idempotency_key": "token-check-001"
     }
+  }'
+```
+
+A successful call returns an async job handle:
+
+```json
+{
+  "job_id": "job_01hv7p4t8t7dd3y0f7p9qkz9wq",
+  "status": "queued",
+  "agent_id": "token_analytics_v1",
+  "created_at": "2026-03-06T12:00:00.000Z"
 }
 ```
 
-#### iOS (Kotlin side of a KMP project)
-
-```kotlin
-import dev.deviceai.core.DeviceAI
-import dev.deviceai.core.Environment
-
-private val sdkInit by lazy {
-    DeviceAI.initialize { environment = Environment.Development }
-}
-
-fun MainViewController(): UIViewController {
-    sdkInit
-    return ComposeUIViewController { App() }
-}
-```
-
-#### Desktop
-
-```kotlin
-import dev.deviceai.core.DeviceAI
-import dev.deviceai.core.Environment
-
-fun main() = application {
-    DeviceAI.initialize { environment = Environment.Development }
-    Window(onCloseRequest = ::exitApplication, title = "My App") { App() }
-}
-```
-
-#### With cloud backend (Staging / Production)
-
-```kotlin
-DeviceAI.initialize(context = this, apiKey = "dai_live_...") {
-    environment   = Environment.Production
-    telemetry     = Telemetry.Enabled
-    appVersion    = BuildConfig.VERSION_NAME
-    appAttributes = mapOf("user_tier" to "premium")
-}
-```
-
----
-
-### Step 3 — Download a model
-
-`ModelRegistry` fetches the catalog from HuggingFace and downloads models to local storage. Downloads are resumable on interruption.
-
-```kotlin
-import dev.deviceai.models.ModelRegistry
-
-val model = ModelRegistry.getOrDownload("ggml-tiny.en.bin") { progress ->
-    println("${progress.percentComplete.toInt()}% — ${progress.bytesDownloaded / 1_000_000}MB")
-}
-```
-
-> **whisper-tiny.en** (75 MB) runs 7× faster than real-time on mid-range Android hardware.
-
----
-
-### Step 4 — Transcribe speech
-
-```kotlin
-import dev.deviceai.SpeechBridge
-import dev.deviceai.SttConfig
-
-SpeechBridge.initStt(model.modelPath, SttConfig(language = "en", useGpu = true))
-
-val text: String = SpeechBridge.transcribeAudio(samples) // FloatArray, 16kHz mono PCM
-// or
-val text: String = SpeechBridge.transcribe("/path/to/audio.wav")
-
-SpeechBridge.shutdownStt()
-```
-
----
-
-### Step 5 — Synthesize speech (optional)
-
-```kotlin
-import dev.deviceai.SpeechBridge
-import dev.deviceai.TtsConfig
-
-SpeechBridge.initTts(
-    modelPath  = voice.modelPath,
-    tokensPath = voice.tokensPath,
-    config     = TtsConfig(speechRate = 1.0f)
-)
-
-val pcm: ShortArray = SpeechBridge.synthesize("Hello from DeviceAI.")
-// Play with AudioTrack (Android), AVAudioEngine (iOS), or javax.sound (Desktop)
-
-SpeechBridge.shutdownTts()
-```
-
----
-
-### Step 6 — Run a local LLM
-
-```kotlin
-import dev.deviceai.core.DeviceAI
-import dev.deviceai.llm.llm
-
-// Create a chat session — model loads once, history is automatic
-val session = DeviceAI.llm.chat("/path/to/model.gguf") {
-    systemPrompt = "You are a helpful assistant."
-    maxTokens    = 512
-    temperature  = 0.7f
-    useGpu       = true
-}
-
-// Streaming (recommended for UI)
-session.send("What is Kotlin Multiplatform?")
-    .collect { token -> print(token) }
-
-// Multi-turn — history managed automatically
-session.send("Give me a code example.").collect { print(it) }
-
-// Blocking (scripts / tests)
-val reply = session.sendBlocking("Summarise in one line.")
-
-// Lifecycle
-session.cancel()       // abort in-progress generation
-session.clearHistory() // fresh conversation, model stays loaded
-session.close()        // unload model, free resources
-```
-
----
-
-### Step 7 — Offline RAG (optional)
-
-Attach a `BM25RagStore` to inject local documents as context — no embedding model required.
-
-```kotlin
-import dev.deviceai.llm.rag.BM25RagStore
-
-val store = BM25RagStore(rawChunks = listOf(
-    "DeviceAI supports Android, iOS, and Desktop.",
-    "LLM inference uses llama.cpp with Metal on Apple Silicon."
-))
-
-val session = DeviceAI.llm.chat("/path/to/model.gguf") {
-    ragStore = store
-}
-
-session.send("Which platforms does DeviceAI support?").collect { print(it) }
-```
-
----
-
-## Environments
-
-| Environment | API key | Backend | Log level | Use for |
-|-------------|---------|---------|-----------|---------|
-| `Development` | not required | none — local model path | DEBUG | local dev, unit tests |
-| `Staging` | required | staging.api.deviceai.dev | DEBUG | pre-release QA |
-| `Production` | required | api.deviceai.dev | WARN | release builds |
-
----
-
-## Architecture
-
-```
-Your App
-    │
-    ▼
-DeviceAI.initialize(context, apiKey) { environment = Environment.Development }
-    │
-    ├── kotlin/core   (dev.deviceai:core)
-    │       DeviceAI           — unified SDK entry point
-    │       CoreSDKLogger       — structured, environment-aware logging
-    │       ModelRegistry       — model discovery, download, local management
-    │       PlatformStorage     — cross-platform file I/O
-    │
-    ├── kotlin/speech  (dev.deviceai:speech)
-    │       SpeechBridge        — unified STT + TTS Kotlin API
-    │           │
-    │           ├── Android / Desktop  →  JNI → libdeviceai_speech_jni.so/.dylib
-    │           └── iOS  →  C Interop → libspeech_merged.a
-    │                           ├── whisper.cpp   (STT)
-    │                           └── sherpa-onnx   (TTS + VAD)
-    │
-    └── kotlin/llm  (dev.deviceai:llm)
-            DeviceAI.llm.chat()   — creates a ChatSession
-            ChatSession            — stateful conversation, streaming Flow<String>
-            BM25RagStore           — offline retrieval-augmented generation
-                │
-                ├── Android / Desktop  →  JNI → libdeviceai_llm_jni.so/.dylib
-                └── iOS  →  C Interop → libllm_merged.a
-                                └── llama.cpp (Metal + CoreML)
-```
-
----
-
-## Features
-
-| Feature | Status |
-|---------|--------|
-| Speech-to-Text (Whisper) | ✅ Android, iOS, Desktop |
-| Text-to-Speech (sherpa-onnx VITS / Kokoro) | ✅ Android, iOS, Desktop |
-| Voice Activity Detection (Silero VAD) | ✅ Android, iOS, Desktop |
-| LLM inference (llama.cpp) | ✅ Android, iOS, Desktop |
-| Offline RAG (BM25) | ✅ Android, iOS, Desktop |
-| Streaming LLM generation (`Flow<String>`) | ✅ Android, iOS, Desktop |
-| Stateful `ChatSession` with auto history | ✅ |
-| Auto model download (HuggingFace) | ✅ |
-| GPU acceleration (Metal / Vulkan) | ✅ |
-| Cloud backend — OTA models, telemetry | 🚧 In progress |
-| Swift SDK | 🗓 Planned |
-| Flutter plugin | 🗓 Planned |
-| React Native module | 🗓 Planned |
-| Tool calling / voice agents | 🗓 Planned |
-
----
-
-## Models
-
-### Whisper (STT)
-
-| Model | Size | Speed | Best for |
-|-------|------|-------|----------|
-| `ggml-tiny.en.bin` | 75 MB | 7× real-time | English, mobile-first |
-| `ggml-base.bin` | 142 MB | Fast | Multilingual, balanced |
-| `ggml-small.bin` | 466 MB | Medium | Higher accuracy |
-
-### LLM (GGUF via llama.cpp)
-
-| Model | Size | Best for |
-|-------|------|----------|
-| SmolLM2-360M-Instruct (Q4) | ~220 MB | Fastest, mobile-first |
-| SmolLM2-1.7B-Instruct (Q4) | ~1 GB | Balanced |
-| Qwen2.5-0.5B-Instruct (Q4) | ~400 MB | Multilingual, compact |
-| Llama-3.2-1B-Instruct (Q4) | ~700 MB | Strong reasoning |
-
-Browse all available models via `LlmCatalog`.
-
----
-
-## Platform support
-
-| Platform | STT | TTS | LLM | Sample App |
-|----------|-----|-----|-----|------------|
-| Android (API 26+) | ✅ | ✅ | ✅ | ✅ |
-| iOS 17+ | ✅ | ✅ | ✅ | ✅ |
-| macOS Desktop | ✅ | ✅ | ✅ | ✅ |
-
----
-
-## Benchmarks
-
-| Device | Chip | Model | Audio | Inference | RTF |
-|--------|------|-------|-------|-----------|-----|
-| Redmi Note 9 Pro | Snapdragon 720G | whisper-tiny | 5.4s | 746ms | **0.14x** |
-
-> RTF < 1.0 = faster than real-time. 0.14x = ~7× faster than real-time on a mid-range Android phone.
-
----
-
-## Building from source
-
-**Prerequisites:** CMake 3.22+, Android NDK r26+, Xcode 26+ (iOS), Kotlin 2.2+
+You can then fetch the result:
 
 ```bash
-git clone --recursive https://github.com/deviceai-labs/deviceai.git
-cd deviceai
-
-# Compile checks
-./gradlew :kotlin:core:compileKotlinJvm
-./gradlew :kotlin:speech:compileKotlinJvm
-./gradlew :kotlin:llm:compileKotlinJvm
-
-# Run the desktop sample
-./gradlew :samples:composeApp:run
+curl -X GET "https://api.niffera.com/v1/jobs/job_01hv7p4t8t7dd3y0f7p9qkz9wq" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json"
 ```
 
+### Minimal working example in TypeScript
+
+```ts
+import axios from "axios"
+
+const client = axios.create({
+  baseURL: "https://api.niffera.com/v1",
+  headers: {
+    Authorization: `Bearer ${process.env.NIFFERA_API_KEY}`,
+    "Content-Type": "application/json",
+  },
+})
+
+async function runTokenCheck() {
+  const run = await client.post("/agents/run", {
+    agent_id: "token_analytics_v1",
+    input: {
+      token_address: "So11111111111111111111111111111111111111112",
+      chain: "solana",
+      timeframe: "24h",
+    },
+    metadata: {
+      client_id: "builder-demo",
+      idempotency_key: "token-check-001",
+    },
+  })
+
+  const jobId = run.data.job_id
+
+  while (true) {
+    const job = await client.get(`/jobs/${jobId}`)
+
+    if (job.data.status === "completed") {
+      return job.data.result
+    }
+
+    if (job.data.status === "failed") {
+      throw new Error(job.data.error?.message ?? "Job failed")
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+  }
+}
+
+runTokenCheck()
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error))
+```
+
+> [!IMPORTANT]
+> Use API keys via environment variables or a secrets manager. Never hardcode production credentials in the repo.
+
 ---
 
-## Roadmap
+## Common Embed Paths
 
-- [x] Kotlin SDK — speech, LLM, RAG, streaming
-- [x] `DeviceAI` unified entry point with `Environment` + `CloudConfig` DSL
-- [x] `ChatSession` — stateful multi-turn LLM conversations
-- [ ] Backend integration — device registration, OTA model assignment, telemetry
-- [ ] Swift SDK — native iOS/macOS package
-- [ ] Flutter SDK
-- [ ] React Native SDK
-- [ ] Tool calling / voice agents (`DeviceAI.agent`)
+Niffera is flexible because the same engine can sit behind multiple product shapes without changing the core request model.
+
+### Backend / microservice
+
+Use Niffera as a dedicated analytics dependency in your server stack. Your service receives user requests, calls the Agents API, stores results, and renders them into your own dashboards or risk workflows.
+
+### Script / job
+
+Use a scheduled script for repeated token checks, wallet monitoring, or daily behavioral reviews. This is a clean fit for cron jobs, CI runners, and one-shot operational scripts.
+
+### Worker / queue
+
+For higher volume workloads, use the async jobs model properly. Push agent runs from your queue, let workers track job state, and fan results into alerts or downstream systems once webhooks arrive.
+
+### App / frontend
+
+Use Niffera inside a frontend or internal console where a user needs fast reads on tokens and wallets. The web terminal can be the full destination, or your app can call the same backend directly and keep the UI custom.
+
+| Embed path | Best fit | Typical outcome |
+|---|---|---|
+| Backend / microservice | Internal risk service or API product | Shared analytics layer for multiple apps |
+| Script / job | Scheduled monitoring or one-off checks | Lightweight automation with low overhead |
+| Worker / queue | High-throughput async processing | Reliable large-scale agent orchestration |
+| App / frontend | Trader tools or internal dashboards | Interactive UX on top of structured analytics |
 
 ---
 
-## Sample App
+## Composable Parts
 
-`samples/composeApp/` is a working Compose Multiplatform demo. Runs on Android, iOS, and Desktop.
+Niffera is easier to extend when treated as a system of reusable parts rather than one monolithic terminal.
+
+### Core modules
+
+| Module | Purpose |
+|---|---|
+| Token Analytics Engine | Computes liquidity, volume, volatility, holder concentration, flow, and execution risk |
+| Wallet Analytics Engine | Computes PnL, drawdowns, exposure, trade behavior, and concentration patterns |
+| Analytics Agent | Converts token or wallet metrics into a concise risk-aware explanation |
+| Research Agent | Summarizes news, catalysts, narrative shifts, and context around a token or project |
+| Jobs API | Handles async execution for heavier runs |
+| Webhooks layer | Pushes completed events into your stack |
+| Jupiter swap surface | Connects insight to manual execution on Solana |
+
+### System sketch
+
+```text
+Wallet / Token input
+        ↓
+Analytics engine
+        ↓
+Agent layer
+        ↓
+UI result / API result / Webhook event
+        ↓
+Optional manual swap via Jupiter
+```
+
+This structure makes Niffera usable both as a product and as an infrastructure component.
+
+---
+
+## Configuration Surface
+
+Niffera exposes a practical configuration surface for builders. You are not tuning abstract ML internals; you are controlling clear runtime behavior.
+
+### Common things you can tune
+
+| Surface | Examples |
+|---|---|
+| Request params | `chain`, `timeframe`, `token_address`, `wallet_address`, `agent_id` |
+| Metadata | `client_id`, `idempotency_key`, request labels |
+| Webhooks | destination URL, event selection, signing secret |
+| Runtime policy | polling interval, retries, backoff strategy |
+| Environment | API key, webhook secret, deployment URLs |
+| Product behavior | credit usage awareness, tier-based throughput, alert routing |
+
+### Example environment setup
 
 ```bash
-# Desktop
-./gradlew :samples:composeApp:run
-
-# Android — open in Android Studio and run on device/emulator
-
-# iOS — open samples/iosApp/iosApp.xcodeproj in Xcode and run
+NIFFERA_API_KEY=your_api_key_here
+NIFFERA_WEBHOOK_SECRET=your_webhook_secret_here
+NIFFERA_BASE_URL=https://api.niffera.com/v1
 ```
+
+### Example request surface
+
+```json
+{
+  "agent_id": "wallet_analytics_v1",
+  "input": {
+    "wallet_address": "YourWalletAddressHere",
+    "chain": "solana",
+    "timeframe": "30d"
+  },
+  "metadata": {
+    "client_id": "ops-dashboard",
+    "idempotency_key": "wallet-review-042"
+  },
+  "webhook_url": "https://your-app.com/niffera-webhook"
+}
+```
+
+> [!TIP]
+> If you expect retries, always send an `idempotency_key` so duplicate logical requests do not create duplicate jobs.
 
 ---
 
-## Contributing
+## Production Notes
 
-Issues and PRs welcome. Platform wrapper contributions (`ios/`, `flutter/`, `react-native/`) are especially welcome — each stub directory contains a README with the expected API surface.
+Niffera is designed to be practical in production environments where clarity and control matter more than flashy abstractions.
+
+### Stack and operating model
+
+| Area | Notes |
+|---|---|
+| API style | HTTPS + JSON with Bearer authentication |
+| Execution model | Async jobs for heavier runs, polling or webhooks for completion |
+| Current live chain | Solana |
+| Swap routing | Jupiter |
+| Account model | Wallet-based identity |
+| Economic model | Credits + paid tiers + $NIFFERA utility token |
+| Token usage split | 80% burn / 20% treasury |
+
+### Performance and deployment hints
+
+The jobs model is there to avoid request timeout problems for heavy analytics. Small checks can feel near-real-time, while larger runs should be treated as async work from the start.
+
+For production use, a stable pattern looks like this:
+
+1. Your service sends `POST /agents/run`
+2. Niffera returns `job_id`
+3. You either poll `GET /jobs/{job_id}` or wait for `job.completed`
+4. Your app stores the result and decides whether to notify, display, or escalate it
+
+### Recommended practices
+
+- Keep API keys in secrets storage
+- Verify webhook signatures with HMAC SHA-256
+- Acknowledge webhook deliveries quickly and process them async
+- Use retries with backoff instead of tight polling loops
+- Treat Niffera as an analytics and decisioning layer, not as blind execution logic
+
+> [!NOTE]
+> The cleanest production architecture is usually Niffera for analytics and signals, with final execution logic and risk policy enforced inside your own stack.
+
+---
+
+## Known Constraints
+
+Niffera is intentionally opinionated, and some constraints are part of that design rather than missing features.
+
+| Constraint | What it means in practice |
+|---|---|
+| No autonomous trading in the current product | Trades are manual and require wallet signature |
+| Solana-first execution | Jupiter swaps are live on Solana, while wider chain coverage is roadmap-based |
+| Data may have delays or gaps | On-chain and market feeds can be imperfect, especially during volatility |
+| Analytics are not guarantees | Results are informational, not financial advice or certainty |
+| Free tier is limited | 10 starter credits are enough to test, not to run sustained production usage |
+| Heavy usage depends on paid tiers | Throughput, limits, and deeper usage scale with credits and subscription tier |
+| Browser extension and Telegram Mini App are not live yet | They are planned companion surfaces, not fully deployed execution layers |
+| Niffera is non-custodial | The platform never holds assets, which means the user must still manage wallet safety and approvals carefully |
+
+### Non-supported expectations
+
+Niffera is not meant for:
+- guaranteed signal products
+- blind copy trading
+- one-click profit automation
+- custody or delegated trade execution
+- ignoring wallet confirmation flows
+
+That boundary is important because the system is built to improve judgment, not replace responsibility.
+
+---
+
+## Closing View
+
+Niffera Analytics is strongest when used as a **risk-aware intelligence layer** inside a real trading workflow.
+
+For traders, that means seeing token structure, wallet behavior, AI commentary, and execution context in one place.  
+For builders, that means a fast integration surface with clean primitives: JSON in, structured analytics out, optional webhooks, and a clear path from fit to extension.
+
+If your question is **“how fast can I plug this into a real system?”**, the answer is simple: start with one agent run, treat jobs as the contract, and build from there.
